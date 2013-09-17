@@ -2,7 +2,7 @@ source 'https://rubygems.org'
 
 gem 'daemons'
 gem 'aws-sdk'
-gem 'pantry_daemon_common', git: 'git@github.com:wongatech/pantry_daemon_common.git', :tag => 'v0.1.6'
+gem 'pantry_daemon_common', git: 'git@github.com:wongatech/pantry_daemon_common.git', :tag => 'v0.1.7'
 gem 'rest-client'
 gem 'json'
 gem 'chef','~> 11.6.0'

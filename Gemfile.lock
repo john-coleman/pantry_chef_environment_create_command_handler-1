@@ -1,9 +1,9 @@
 GIT
   remote: git@github.com:wongatech/pantry_daemon_common.git
-  revision: 7b6519b0a3b877abff609a1f7238c9958240b037
-  tag: v0.1.6
+  revision: 0feea3c0a4fc488b7eaacd5fe9de364fbdd52e34
+  tag: v0.1.7
   specs:
-    pantry_daemon_common (0.1.6)
+    pantry_daemon_common (0.1.7)
       aws-sdk
       daemons
       em-winrm
