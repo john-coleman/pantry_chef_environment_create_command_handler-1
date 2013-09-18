@@ -83,6 +83,7 @@ module Wonga
                 "msbuild",
                 "parameterized-trigger",
                 "radiatorviewplugin",
+                "scm-sync-configuration",
                 "translation",
                 "versionnumber"
               ],
