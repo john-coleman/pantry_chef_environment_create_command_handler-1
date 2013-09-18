@@ -5,10 +5,10 @@ require 'active_support/core_ext'
 module Wonga
   module Pantry
     class ChefEnvironmentBuilder
-      def initialize(message, logger)
-        @team_name = message[:team_name]
-        @domain = message[:domain]
-        @jenkins_host_name = message[:jenkins_host_name]
+      def initialize(team_name, domain, jenkins, logger)
+        @team_name = team_name
+        @domain = domain
+        @jenkins_host_name = jenkins
         @logger = logger
       end
 

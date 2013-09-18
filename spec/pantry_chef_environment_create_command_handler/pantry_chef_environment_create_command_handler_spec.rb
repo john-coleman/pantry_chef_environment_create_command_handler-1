@@ -15,14 +15,9 @@ describe Wonga::Pantry::ChefEnvironmentBuilder do
   let(:team_name) { 'some-name' }
   let(:domain) { 'test-domain' }
   let(:jenkins_host_name) { 'some-name' }
-  let(:message) {
-    {
-      team_name: team_name,
-      domain: domain,
-      jenkins_host_name: jenkins_host_name
-    }
+  subject { 
+    described_class.new(team_name, domain, jenkins_host_name, logger) 
   }
-  subject { described_class.new(message, logger) }
 
   describe "#chef_environment" do
     it "returns prepared name" do
