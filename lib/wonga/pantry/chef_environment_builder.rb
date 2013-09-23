@@ -14,10 +14,15 @@ module Wonga
 
       def build!
         e = Chef::Environment.new
-        e.name(chef_environment)
+        @name = chef_environment
+        e.name(@name)
         @logger.info("Building environment #{e.name}")        
         e.default_attributes = attributes
         e.create
+      end
+
+      def name
+        @name
       end
 
       def chef_environment

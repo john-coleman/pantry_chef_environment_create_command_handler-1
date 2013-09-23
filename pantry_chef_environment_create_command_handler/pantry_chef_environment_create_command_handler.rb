@@ -1,21 +1,26 @@
+require_relative '../lib/wonga/pantry/chef_environment_builder'
+
 module Wonga
   module Daemon
     class PantryChefEnvironmentCreateCommandHandler
-      def initialize(publisher, config)
+      def initialize(publisher, logger)
         @publisher = publisher
-        @config = config
+        @logger = logger
       end
 
       def handle_message(message)
+        @logger.info("Received message: #{message}")
         Chef::Knife.new.configure_chef
-        chef_builder = ChefEnvironmentBuilder.new(
-          message[:team_name],
-          message[:domain],
-          message[:jenkins_host_name], 
-          logger
+        puts message
+        chef_builder = Wonga::Pantry::ChefEnvironmentBuilder.new(
+          message["team_name"],
+          message["domain"],
+          message["jenkins_host_name"], 
+          @logger
         )
         chef_builder.build!
-        message[:chef_environment] = chef_builder.name
+        message["chef_environment"] = chef_builder.name
+        @logger.info("Message for #{message["team_name"]} processed. publishing")
         @publisher.publish(message)
       end
     end
