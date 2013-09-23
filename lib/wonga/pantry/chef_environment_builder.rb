@@ -6,23 +6,26 @@ require 'erb'
 module Wonga
   module Pantry
     class ChefEnvironmentBuilder
-      def initialize(message, logger)
-        @message = message
+      def initialize(template_path, logger)
+        @template_path = template_path
         @logger = logger
       end
 
-      def build!
+      def build!(message)
         e = Chef::Environment.new
-        @name = chef_environment
-        e.name(@name)
+        name = chef_environment(message)
+        e.name(name)
         @logger.info("Building environment #{e.name}")
-        e.default_attributes = eval(ERB.new(File.read(File.join(Dir.getwd, "/config/jenkins_attributes.erb"))).result(binding))
+        
+        @message = message # require for ERB
+        e.default_attributes = eval(ERB.new(File.read(File.join(@template_path, "jenkins_attributes.erb"))).result(binding))
         e.create
+        name
       end
 
-      def chef_environment
+      def chef_environment(message)
         environments = Chef::Environment.list.keys
-        team_name = @message[:team_name].underscore.parameterize.gsub('_', '-').gsub('--', '-')
+        team_name = message[:team_name].underscore.parameterize.gsub('_', '-').gsub('--', '-')
         if !environments.include?(team_name)
           team_name
         else
