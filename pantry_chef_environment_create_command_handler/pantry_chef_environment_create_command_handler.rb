@@ -11,7 +11,6 @@ module Wonga
       def handle_message(message)
         @logger.info("Received message: #{message}")
         Chef::Knife.new.configure_chef
-        puts message
         chef_builder = Wonga::Pantry::ChefEnvironmentBuilder.new(
           message["team_name"],
           message["domain"],
