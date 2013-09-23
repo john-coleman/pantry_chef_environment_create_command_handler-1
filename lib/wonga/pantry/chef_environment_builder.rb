@@ -25,7 +25,7 @@ module Wonga
 
       def chef_environment(message)
         environments = Chef::Environment.list.keys
-        team_name = message[:team_name].underscore.parameterize.gsub('_', '-').gsub('--', '-')
+        team_name = message["team_name"].underscore.parameterize.gsub('_', '-').gsub('--', '-')
         if !environments.include?(team_name)
           team_name
         else
