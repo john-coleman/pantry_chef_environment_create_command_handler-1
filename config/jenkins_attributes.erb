@@ -57,24 +57,24 @@
       "strict_host_key_checking" => "no"
     }
   },
-  "wonga": {
-    "jenkins": {
-      "git_user_data_bag": "users",
-      "git_user_data_bag_item": "ProvisionerUsername",
-      "git_ssh_hosts": [
+  "wonga" => {
+    "jenkins" => {
+      "git_user_data_bag"=> "users",
+      "git_user_data_bag_item"=> "ProvisionerUsername",
+      "git_ssh_hosts"=> [
         {
-          "host": "github.com",
-          "StrictHostKeyChecking": "no",
-          "User": "git"
+          "host"=> "github.com",
+          "StrictHostKeyChecking"=> "no",
+          "User"=> "git"
         },
         {
-          "host": "git.example.com",
-          "StrictHostKeyChecking": "no",
-          "User": "git2"
+          "host"=> "git.example.com",
+          "StrictHostKeyChecking"=> "no",
+          "User"=> "git2"
         }
       ],
-      "scm_sync_configuration_data_bag": "<%= @message["team_name"] %>",
-      "scm_sync_configuration_data_bag_item": "jenkins_scm_sync_configuration_plugin"
+      "scm_sync_configuration_data_bag"=> "<%= @message["team_name"] %>",
+      "scm_sync_configuration_data_bag_item"=> "jenkins_scm_sync_configuration_plugin"
     }
   }
 }
