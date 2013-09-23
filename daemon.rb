@@ -8,5 +8,5 @@ config_path = File.join(File.dirname(File.symlink?(__FILE__) ? File.readlink(__F
 config_name = File.join(config_path, "daemon.yml")
 Wonga::Daemon.load_config(File.expand_path(config_name))
 Chef::Knife.new.configure_chef
-builder = Wonga::Pantry::ChefEnvironmentBuilder.new(config_path, Wonga::Daemon.logger)
+builder = Wonga::Pantry::ChefEnvironmentBuilder.new(File.expand_path(config_path), Wonga::Daemon.logger)
 Wonga::Daemon.run(Wonga::Daemon::PantryChefEnvironmentCreateCommandHandler.new(builder, Wonga::Daemon.publisher,Wonga::Daemon.logger))
