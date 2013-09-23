@@ -16,7 +16,7 @@ module Wonga
         @name = chef_environment
         e.name(@name)
         @logger.info("Building environment #{e.name}")
-        e.default_attributes = attributes
+        e.default_attributes = eval(ERB.new(File.read(File.join(Dir.getwd, "/config/jenkins_attributes.erb"))).result(binding))
         e.create
       end
 
