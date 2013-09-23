@@ -12,12 +12,8 @@ end
 
 describe Wonga::Pantry::ChefEnvironmentBuilder do
   let(:logger) { instance_double('Logger').as_null_object }
-  let(:team_name) { 'some-name' }
-  let(:domain) { 'test-domain' }
-  let(:jenkins_host_name) { 'some-name' }
-  subject { 
-    described_class.new(team_name, domain, jenkins_host_name, logger) 
-  }
+  let(:message) { {team_name: 'some-name', domain: 'test-domain', jenkins_host_name: 'some-name'} }
+  subject { described_class.new(message, logger) }
 
   describe "#chef_environment" do
     it "returns prepared name" do
@@ -39,8 +35,8 @@ describe Wonga::Pantry::ChefEnvironmentBuilder do
 
     it "sets address for jenkins" do
       jenkins = environment.default_attributes['jenkins']['server']
-      expect(jenkins['host']).to eq "#{team_name}.#{domain}"
-      expect(jenkins["url"]).to include("#{team_name}.#{domain}")
+      expect(jenkins['host']).to eq "#{message[:team_name]}.#{message[:domain]}"
+      expect(jenkins["url"]).to include "#{message[:team_name]}.#{message[:domain]}"
     end
 
     context "for team with restricted symbols in name" do

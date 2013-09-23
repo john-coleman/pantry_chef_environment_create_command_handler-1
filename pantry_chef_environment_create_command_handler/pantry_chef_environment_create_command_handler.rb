@@ -12,10 +12,8 @@ module Wonga
         @logger.info("Received message: #{message}")
         Chef::Knife.new.configure_chef
         chef_builder = Wonga::Pantry::ChefEnvironmentBuilder.new(
-          message["team_name"],
-          message["domain"],
-          message["jenkins_host_name"], 
-          @logger
+          message,
+          logger
         )
         chef_builder.build!
         message["chef_environment"] = chef_builder.name
