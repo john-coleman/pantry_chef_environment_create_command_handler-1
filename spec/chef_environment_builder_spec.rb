@@ -4,7 +4,7 @@ require_relative "../lib/wonga/pantry/chef_environment_builder"
 describe Wonga::Pantry::ChefEnvironmentBuilder do
   
   let(:logger) { instance_double('Logger').as_null_object }
-  let(:message) { {team_name: 'some-name', domain: 'test-domain', jenkins_host_name: 'some-name'} }
+  let(:message) { {"team_name"=> 'some-name', "domain"=> 'test-domain', "jenkins_host_name"=> 'some-name'} }
   let(:path) { File.join(File.dirname(__FILE__), '../config') }
   subject { described_class.new(path, logger) }
 
