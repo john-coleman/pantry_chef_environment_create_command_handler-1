@@ -5,6 +5,8 @@ require 'active_support/core_ext'
 module Wonga
   module Pantry
     class ChefEnvironmentBuilder
+      attr_reader :name
+
       def initialize(team_name, domain, jenkins, logger)
         @team_name = team_name
         @domain = domain
@@ -19,10 +21,6 @@ module Wonga
         @logger.info("Building environment #{e.name}")        
         e.default_attributes = attributes
         e.create
-      end
-
-      def name
-        @name
       end
 
       def chef_environment
