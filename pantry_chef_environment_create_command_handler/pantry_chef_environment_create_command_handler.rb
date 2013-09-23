@@ -13,7 +13,7 @@ module Wonga
         Chef::Knife.new.configure_chef
         chef_builder = Wonga::Pantry::ChefEnvironmentBuilder.new(
           message,
-          logger
+          @logger
         )
         chef_builder.build!
         message["chef_environment"] = chef_builder.name
