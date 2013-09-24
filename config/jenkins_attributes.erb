@@ -1,3 +1,4 @@
+<% team_name = @message["team_name"].underscore.parameterize.gsub('_', '-').gsub('--', '-') %>
 {
   "authorization" => {
     "sudo" => {
@@ -16,7 +17,7 @@
   },
   "jenkins" => {
     "http_proxy" => {
-      "host_name" =>"<%= @message['team_name'] %>.<%= @message['domain'] %>",
+      "host_name" =>"<%= team_name %>.<%= @message["domain"] %>",
       "variant" => "nginx"
     },
     "node" => {
@@ -27,7 +28,7 @@
       "home" => "C:\\Jenkins"
     },
     "server" => {
-      "host" => "<%= @message['team_name'] %>.<%= @message['domain'] %>",
+      "host" => "<%= team_name %>.<%= @message["domain"] %>",
       "plugins" => [
         "active-directory",
         "ansicolor",
@@ -46,7 +47,7 @@
         "versionnumber"
       ],
       "port" => 8080,
-      "url" => "http://<%= @message['team_name'] %>.<%= @message['domain'] %>:8080"
+      "url" => "http://<%= team_name %>.<%= @message["domain"] %>:8080"
     },
   },
   "nginx" => {
@@ -73,7 +74,7 @@
           "User"=> "git2"
         }
       ],
-      "scm_sync_configuration_data_bag"=> "<%= @message["team_name"] %>",
+      "scm_sync_configuration_data_bag"=> "<%= team_name %>",
       "scm_sync_configuration_data_bag_item"=> "jenkins_scm_sync_configuration_plugin"
     }
   }
