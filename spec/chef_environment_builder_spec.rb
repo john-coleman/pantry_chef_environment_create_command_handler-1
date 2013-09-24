@@ -4,7 +4,8 @@ require_relative "../lib/wonga/pantry/chef_environment_builder"
 describe Wonga::Pantry::ChefEnvironmentBuilder do
 
   let(:logger) { instance_double('Logger').as_null_object }
-  let(:message) { {"team_name"=> 'some-name', "domain"=> 'test-domain', "jenkins_host_name"=> 'some-name'} }
+  let(:message) { {"team_name"=> 'Some Name', "domain"=> 'test-domain', "jenkins_host_name"=> 'some-name'} }
+  let(:team_name) { message['team_name'].underscore.parameterize.gsub('_', '-').gsub('--', '-') }
   let(:path) { File.join(File.dirname(__FILE__), '../config') }
   subject { described_class.new(path, logger) }
 
@@ -33,8 +34,8 @@ describe Wonga::Pantry::ChefEnvironmentBuilder do
 
       it "with address for jenkins" do
         jenkins = environment.default_attributes['jenkins']['server']
-        expect(jenkins['host']).to eq "#{message['team_name']}.#{message['domain']}"
-        expect(jenkins["url"]).to include "#{message['team_name']}.#{message['domain']}"
+        expect(jenkins['host']).to eq "#{team_name}.#{message['domain']}"
+        expect(jenkins["url"]).to include "#{team_name}.#{message['domain']}"
       end
     end
 
