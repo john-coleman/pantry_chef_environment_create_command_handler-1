@@ -1,7 +1,7 @@
 require 'chef'
 require 'chef/knife'
-require 'active_support/core_ext'
 require 'erb'
+require 'active_support/core_ext'
 
 module Wonga
   module Pantry
@@ -16,13 +16,14 @@ module Wonga
         name = chef_environment(message)
         e.name(name)
         @logger.info("Building environment #{e.name}")
-        
+
         @message = message # require for ERB
         e.default_attributes = eval(ERB.new(File.read(File.join(@template_path, "jenkins_attributes.erb"))).result(binding))
         e.create
         name
       end
 
+      private
       def chef_environment(message)
         environments = Chef::Environment.list.keys
         team_name = message["team_name"].underscore.parameterize.gsub('_', '-').gsub('--', '-')

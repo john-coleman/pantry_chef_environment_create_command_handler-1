@@ -25,9 +25,9 @@ GIT
 GEM
   remote: https://rubygems.org/
   specs:
-    active_support (3.0.0)
-      activesupport (= 3.0.0)
-    activesupport (3.0.0)
+    activesupport (3.2.14)
+      i18n (~> 0.6, >= 0.6.4)
+      multi_json (~> 1.0)
     akami (1.2.0)
       gyoku (>= 0.4.0)
       nokogiri (>= 1.4.0)
@@ -192,20 +192,15 @@ PLATFORMS
   ruby
 
 DEPENDENCIES
-  active_support
-  aws-sdk
+  activesupport (~> 3.2.14)
   chef (~> 11.6.0)
   chef-zero
-  daemons
   em-winrm!
   guard-bundler
   guard-rspec
-  i18n
-  json
   pantry_daemon_common!
   pry-debugger
   rake
-  rest-client
   rspec
   rspec-fire
   simplecov
