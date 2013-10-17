@@ -39,6 +39,8 @@
       "service_user_password" => "ProvisionerPassword"
     },
     "server" => {
+      "repo_url" => "http://pkg.jenkins-ci.org/debian-stable",
+      "repo_key" => "http://pkg.jenkins-ci.org/debian-stable/jenkins-ci.org.key",
       "host" => "<%= team_name %>.<%= @message["domain"] %>",
       "plugins" => [
         "active-directory",
