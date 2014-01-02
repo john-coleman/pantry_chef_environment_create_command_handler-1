@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-gem 'pantry_daemon_common', git: 'git@github.com:wongatech/pantry_daemon_common.git', :tag => 'v0.1.7'
+gem 'pantry_daemon_common', git: 'git@github.com:wongatech/pantry_daemon_common.git', :tag => 'v0.2.1'
 gem 'chef','~> 11.6.0'
 gem 'activesupport', '~> 3.2.14'
 
@@ -15,7 +15,7 @@ group :test, :development do
   gem 'simplecov-rcov', require: false
   gem 'rspec-fire'
   gem 'rspec'
-  gem 'chef-zero'
+  gem 'chef-zero', github: 'alex-slynko-wonga/chef-zero', branch: 'fix_clear_data_when_no_data_was_added'
   gem 'pry-debugger'
   gem 'rake'
 end
