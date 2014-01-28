@@ -1,4 +1,3 @@
-<% team_name = @message["team_name"].underscore.parameterize.gsub('_', '-').gsub('--', '-') %>
 {
   "authorization" => {
     "sudo" => {
@@ -26,7 +25,7 @@
        "jvm_options" => "-Xmx50m -Xms5m"
     },
     "http_proxy" => {
-      "host_name" =>"<%= team_name %>.<%= @message["domain"] %>",
+      "host_name" =>"<%= @team_name %>.<%= @message["domain"] %>",
       "variant" => "nginx"
     },
     "node" => {
@@ -41,7 +40,7 @@
     "server" => {
       "repo_url" => "http://pkg.jenkins-ci.org/debian-stable",
       "repo_key" => "http://pkg.jenkins-ci.org/debian-stable/jenkins-ci.org.key",
-      "host" => "<%= team_name %>.<%= @message["domain"] %>",
+      "host" => "<%= @team_name %>.<%= @message["domain"] %>",
       "plugins" => [
         "active-directory",
         "ansicolor",
@@ -60,7 +59,7 @@
         "versionnumber"
       ],
       "port" => 8080,
-      "url" => "http://<%= team_name %>.<%= @message["domain"] %>:8080"
+      "url" => "http://<%= @team_name %>.<%= @message["domain"] %>:8080"
     },
   },
   "nginx" => {
@@ -87,7 +86,7 @@
           "User"=> "git2"
         }
       ],
-      "scm_sync_configuration_data_bag"=> "<%= team_name %>",
+      "scm_sync_configuration_data_bag"=> "<%= @team_name %>",
       "scm_sync_configuration_data_bag_item"=> "jenkins_scm_sync_configuration_plugin"
     }
   }
