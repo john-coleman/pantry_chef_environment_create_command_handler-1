@@ -3,10 +3,22 @@ development:
     access_key_id: some_aws_iam_access_key_id
     secret_access_key: some_aws_iam_secret_access_key
     region: eu-west-1
+  chef:
+    wonga:
+      chef_aws_access_key_id: AWSChefKeyUntilRoles
+      chef_aws_secret_access_key: AWSChefSecretUntilRoles
+      build_domain: ADevDomain
+      build_username: ADevProvisionerUsername
+      build_password: ADevBuildPassword
+      product: ADevProduct
+      region: ADevRegion
+    wonga_sonar:
+      jdbc_username: ADevSonarUser
+      jdbc_password: ADevSonarPass
   daemon:
     app_name: this_daemon_name
     backtrace: true
-    dir_mode: normal 
+    dir_mode: normal
     dir: /tmp
     monitor: false
   pantry:
@@ -23,6 +35,18 @@ test:
     access_key_id: some_aws_iam_access_key_id
     secret_access_key: some_aws_iam_secret_access_key
     region: eu-west-1
+  chef:
+    wonga:
+      chef_aws_access_key_id: AWSChefKeyUntilIAMRoles
+      chef_aws_secret_access_key: AWSChefSecretUntilIAMRoles
+      build_domain: ATestDomain
+      build_username: ATestProvisionerUsername
+      build_password: ATestBuildPassword
+      product: ATestProduct
+      region: ATestRegion
+    wonga_sonar:
+      jdbc_username: ATestSonarUser
+      jdbc_password: ATestSonarPass
   daemon:
     app_name: this_daemon_name
     backtrace: true
@@ -47,6 +71,18 @@ production:
     access_key_id: some_aws_iam_access_key_id
     secret_access_key: some_aws_iam_secret_access_key
     region: eu-west-1
+  chef:
+    wonga:
+      chef_aws_access_key_id: AWSChefKeyUntilRoles
+      chef_aws_secret_access_key: AWSChefSecretUntilRoles
+      build_domain: AProdDomain
+      build_username: AProdProvisionerUsername
+      build_password: AProdBuildPassword
+      product: AProdProduct
+      region: AProdRegion
+    wonga_sonar:
+      jdbc_username: AProdSonarUser
+      jdbc_password: AProdSonarPass
   daemon:
     app_name: this_daemon_name
     backtrace: false

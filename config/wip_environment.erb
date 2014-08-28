@@ -1,57 +1,61 @@
-{
-  "api_server" => {
-    "api" => {
-      "host_header" => "api.<%= @message['environment_type'].downcase %>.<%= @team_name %>.<%= @message['domain'] %>",
-      "options" => "",
-      "path" => "C:\\inetpub\\api_site",
-      "site_name" => "api"
-    },
-    "callback" => {
-      "host_header" => "callback.<%= @message['environment_type'].downcase %>.<%= @team_name %>.<%= @message['domain'] %>",
-      "options" => "",
-      "path" => "C:\\inetpub\\callback_site",
-      "site_name" => "callback"
-    },
-    "csapi" => {
-      "host_header" => "csapi.<%= @message['environment_type'].downcase %>.<%= @team_name %>.<%= @message['domain'] %>",
-      "options" => "",
-      "path" => "C:\\inetpub\\csapi_site",
-      "site_name" => "csapi"
-    },
-    "orders" => {
-      "host_header" => "orders.<%= @message['environment_type'].downcase %>.<%= @team_name %>.<%= @message['domain'] %>",
-      "options" => "",
-      "path" => "C:\\inetpub\\orders_site",
-      "site_name" => "orders"
-    },
-    "merchant" => {
-      "host_header" => "merchantapi.<%= @message['environment_type'].downcase %>.<%= @team_name %>.<%= @message['domain'] %>",
-      "options" => "",
-      "path" => "C:\\inetpub\\merchant_site",
-      "site_name" => "merchantapi"
-    }
-  },
+{<% region = (@message['region'] || @config['chef']['wonga']['region']).downcase %><% product = (@message['product'] || @config['chef']['wonga']['product']).downcase %>
   "authorization" => {
     "sudo" => {
-      "groups" => [ "sysadmin" ],
+      "groups" => [ "sysadmin", "EXAMPLE\\\\pantry" ],
       "users" => [ "deploy", "ubuntu" ],
       "passwordless" => true,
       "include_sudoers_d" => true
     }
   },
-  "frontend_server" => {
-    "document_root" => "/var/www/wonga/current/web",
-    "site_dir" => "/var/www/wonga",
-    "php_index_filename" => "app_dev",
-    "vhost_name" => "<%= @message['environment_type'].downcase %>.<%= @team_name %>.<%= @message['domain'] %>",
-    "vhost_template" => "drupal-nginx.erb",
-    "site_id" => "<%= @message['environment_type'].downcase %>.<%= @team_name %>.<%= @message['domain'] %>",
-    "site_name" => "<%= @message['environment_type'].downcase %>.<%= @team_name %>.<%= @message['domain'] %>",
-    "server_name" => "<%= @message['environment_type'].downcase %>.<%= @team_name %>.<%= @message['domain'] %>",
-    "server_type" => "test",
-    "user" => "deploy",
-    "group" => "deploy",
-    "region" => ""
+  "build_agent" => {
+    "nuget_enable_package_restore" => true,
+    "wonga_nuget" => {
+      "repos" => [
+        { "data_bag_id" => "cd_tools", "enabled" => true },
+        { "data_bag_id" => "nuget_org", "enabled" => false },
+        { "data_bag_id" => "wonga_3rd_party_libs", "enabled" => true },
+        { "data_bag_id" => "wonga_artifactory_deploy", "enabled" => true },
+        { "data_bag_id" => "wonga_artifactory_libs", "enabled" => true },
+        { "data_bag_id" => "wonga_build_scripts", "enabled" => true }
+      ],
+      "username" => "<%= @config['chef']['wonga']['build_domain'] %>\\<%= @config['chef']['wonga']['build_username'] %>",
+      "password" => "<%= @config['chef']['wonga']['build_password'] %>"
+    }
+  },
+  "build-essential" => {
+    "compile_time" => true
+  },
+  "drush" => {
+    "version" => "6.2.0",
+    "install_method"=>"git"
+  },
+  "frontend_server"=> {
+    "password_protect" => false,
+    "php_fpm" => {
+      "logfile" => "syslog",
+      "syslog_facility" => "local0"
+    },
+    "php_fpm_ini" => {
+      "disable_functions" => ""
+    },
+    "sites" => [
+      {
+        "databases"=> [],
+        "api_endpoint" => "http://api.<%= product %>.<%= region %>.<%= @message['environment_type'].downcase %>.<%= @team_name %>.<%= @message['domain'] %>",
+        "callbacks_endpoint" => "http://callbacks.<%= product %>.<%= region %>.<%= @message['environment_type'].downcase %>.<%= @team_name %>.<%= @message['domain'] %>",
+        "cdn_endpoint" => "http://cdn.<%= product %>.<%= region %>.<%= @message['environment_type'].downcase %>.<%= @team_name %>.<%= @message['domain'] %>",
+        "cdn_key" => "something",
+        "document_root" => "/var/www/drupalv3",
+        "region" => "<%= region %>",
+        "salesforce_uk_messages_endpoint" => "http://staging-wonga.cs8.force.com/services/apexrest/fcacontactdetails",
+        "server_type" => "test",
+        "static_server_url" => "http://static.<%= product %>.<%= region %>.<%= @message['environment_type'].downcase %>.<%= @team_name %>.<%= @message['domain'] %>",
+        "uses_cdn" => false,
+        "vhost_name" => "<%= product %>.<%= region %>.<%= @message['environment_type'].downcase %>.<%= @team_name %>.<%= @message['domain'] %>",
+        "vhost_template" => "drupalv3-nginx.erb",
+        "wonga_allow_test" => false
+      }
+    ]
   },
   "iis" => {
     "accept_eula" => true
@@ -60,24 +64,110 @@
     "application_monitoring" => {
       "license" => ""
     },
-    "https_download" => "https://download.newrelic.com/dot_net_agent/release/x64",
-    "server_monitoring" => {
+    "dotnet_agent" => {
+      "https_download" => "https://download.newrelic.com/dot_net_agent/release/x64"
+    },
+    "php-agent" => {
+      "agent_action"=>"upgrade",
+      "install_silently" => true
+    },
+    "server_monitor_agent" => {
       "license" => "",
-      "windows_version" => "3.0.201.0",
-      "windows_64_checksum" => "6eacbe4c287f35ad4f6de4bdd21f2a27c4abfc8c03669288fbdd95851d146322"
+      "windows_version" => "3.2.6.0",
+      "windows64_checksum" => "3d893de82b57aa99184beb62d085124b45847eb55d4fa5758637c74ae2342ab0"
     }
   },
   "nginx" => {
-    "default_site_enabled" => false,
-    "server_names_hash_bucket_size" => 256
+    "types_hash_max_size" => 2048,
+    "server_names_hash_bucket_size" => 256,
+    "server_tokens" => false,
+    "worker_connections" => 768,
+    "worker_processes" => 4
   },
-  "wonga" => {
-    "nservicebus_license" => {
+  "openssh" => {
+    "client" => {
+      "strict_host_key_checking" => "no"
     }
   },
+  "postfix" => {
+    "mail_type" => "client",
+    "main" => {
+      "mynetworks" => "<%= @config['chef']['postfix']['main']['mynetworks'] %>",
+      "mydomain" => "<%= @message['domain'] %>",
+      "myorigin" => "<%= @team_name %>.<%= @message['domain'] %>",
+      "relayhost" => "[smtp.example.com]"
+    }
+  },
+  "snmp" => {
+    "all_disk_min" => 102400,
+    "include_all_disks" => true,
+    "load_average" => {
+      "max1" => "6",
+      "max5" => "3",
+      "max15" => "2"
+    },
+    "process_monitoring" => {
+      "proc" => [
+        "sshd"
+      ]
+    },
+    "syscontact" => "<%= @config['chef']['snmp']['syscontact'] %>",,
+    "syslocationPhysical" => "AWS ExampleVPC",
+    "syslocationVirtual" => "AWS ExampleVPC"
+  },
+  "wonga" => {
+    "batch_job_user" => "<%= @config['chef']['wonga']['build_username'] %>",
+    "batch_job_password" => "<%= @config['chef']['wonga']['build_password'] %>",
+    "nservicebus_license" => {
+      "domain" => "<%= @config['chef']['wonga']['build_domain'] %>",
+      "user" => "<%= @config['chef']['wonga']['build_username'] %>",
+      "password" => "<%= @config['chef']['wonga']['build_password'] %>",
+      "aws_access_key_id" => "<%= @config['chef']['wonga']['chef_aws_access_key_id'] %>",
+      "aws_secret_access_key" => "<%= @config['chef']['wonga']['chef_aws_secret_access_key'] %>"
+    },
+    "set_windows_locale" => [
+      {
+        "locale" => "en-UK",
+        "user" => "<%= @config['chef']['wonga']['build_domain'] %>\\<%= @config['chef']['wonga']['build_username'] %>",
+        "password" => "<%= @config['chef']['wonga']['build_password'] %>",
+        "set_to_all_users" => true
+      }
+    ],
+    "sql_database" => {
+      "users" => [
+        {
+          "domain" => "<%= @config['chef']['wonga']['build_domain'] %>",
+          "server_roles" => {
+            "sysadmin" => "ADD"
+          },
+          "username" => "<%= @config['chef']['wonga']['build_username'] %>"
+        },
+        {
+          "domain" => "TEST",
+          "server_roles" => {
+            "sysadmin" => "ADD"
+          },
+          "username" => "ServiceUser"
+        }
+      ]
+    }
+  },
+  "wonga_windows" => {
+    "hotfixes" => [
+      "https://s3-eu-west-1.amazonaws.com/mirror/WindowsHotfixes/Windows6.1-KB2842230-x64.msu",
+      "https://s3-eu-west-1.amazonaws.com/mirror/WindowsHotfixes/Windows6.1-KB2749615-x64.msu"
+    ]
+  },
   "wonga_splunk" => {
-    "splunk_receiving_indexer" => "splunkdev.example.com:9997",
-    "splunk_deployment_server" => "splunkdev.example.com:8089",
-    "splunk_forwarder_installer_path" => "https://s3-eu-west-1.amazonaws.com/mirror/Splunk/splunkforwarder-5.0.2-149561-x64-release.msi"
+    "windows" => {
+      "fowarder_version" => "6.1.3-220630",
+      "forwarder_installer_url" => "https://s3-eu-west-1.amazonaws.com/mirror/Splunk/splunkforwarder-6.1.3-220630-x64-release.msi"
+    },
+    "splunk_receiving_indexer" => "monitoring.example.com:9997",
+    "splunk_deployment_server" => "monitoring.example.com:8089",
+  },
+  "wonga_winbind" => {
+    "config_data_bag" => "winbind",
+    "config_data_bag_item" => "winbind_config"
   }
 }

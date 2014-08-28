@@ -5,6 +5,18 @@
     secret_access_key: <%= @config["aws"]["config"]["secret_access_key"] %>
     region: <%= @config["aws"]["config"]["region"] %>
     request_wait: <%= @config["aws"]["config"]["request_wait"] %>
+  chef:
+    wonga:
+      chef_aws_access_key_id: <%= @config["chef"]["wonga"]["chef_aws_access_key_id"] %>
+      chef_aws_secret_access_key: <%= @config["chef"]["wonga"]["chef_aws_secret_access_key"] %>
+      build_domain: <%= @config["chef"]["wonga"]["build_domain"] %>
+      build_username: <%= @config["chef"]["wonga"]["build_username"] %>
+      build_password: <%= @config["chef"]["wonga"]["build_password"] %>
+      product: <%= @config["chef"]["wonga"]["product"] %>
+      region: <%= @config["chef"]["wonga"]["region"] %>
+    wonga_sonar:
+      jdbc_username: <%= @config["chef"]['sonar_jdbc_username'] %>
+      jdbc_password: <%= @config["chef"]['sonar_jdbc_password'] %>
   daemon:
     app_name: <%= @config["id"] %>
     backtrace: <%= @config["daemon"]["backtrace"] %>

@@ -6,8 +6,9 @@ require 'active_support/core_ext'
 module Wonga
   module Pantry
     class ChefEnvironmentBuilder
-      def initialize(template_path, logger)
+      def initialize(template_path, config, logger)
         @template_path = template_path
+        @config = config
         @logger = logger
       end
 
@@ -21,7 +22,7 @@ module Wonga
         e = Chef::Environment.new
         name = chef_environment_name(@message)
         e.name(name)
-        e.description(@message['description'])
+        e.description(@message['environment_description'])
         @logger.info("Building environment #{e.name}")
 
         e.default_attributes = eval(ERB.new(File.read(File.join(@template_path, "#{@env_type}_environment.erb"))).result(binding))
@@ -44,7 +45,13 @@ module Wonga
       private
       def chef_environment_name(message)
         environments = Chef::Environment.list.keys
-        chef_environment_name = "#{@team_name}-#{@env_type}-#{@env_name}"
+
+        if message['environment_type'] == "CI"
+          chef_environment_name = "#{@team_name}-#{@env_type}"
+        else
+          chef_environment_name = "#{@team_name}-#{@env_type}-#{@env_name}"
+        end
+
         if !environments.include?(chef_environment_name)
           chef_environment_name
         else

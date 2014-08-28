@@ -9,7 +9,6 @@ end
 
 require 'aws'
 require 'chef'
-require 'rspec/fire'
 require 'chef/knife'
 require 'spec_support/shared_daemons'
 require 'chef_zero'
@@ -31,8 +30,6 @@ Chef::Knife.new.configure_chef
 Chef::Config[:chef_server_url] = 'http://127.0.0.1:8889'
 
 RSpec.configure do |config|
-  config.include(RSpec::Fire)
-
   config.order = "random"
 
   config.before(:each) do

@@ -1,7 +1,7 @@
 require 'spec_helper'
 
-require_relative "../../lib/wonga/pantry/chef_environment_builder"
-require_relative '../../pantry_chef_environment_create_command_handler/pantry_chef_environment_create_command_handler'
+require_relative "../../../../lib/wonga/pantry/chef_environment_builder"
+require_relative '../../../../lib/wonga/daemon/pantry_chef_environment_create_command_handler'
 
 describe Wonga::Daemon::PantryChefEnvironmentCreateCommandHandler do
   let(:publisher) { instance_double('Publisher').as_null_object }
@@ -13,8 +13,8 @@ describe Wonga::Daemon::PantryChefEnvironmentCreateCommandHandler do
 
   it "sends message with new environment name" do
     message = { 'domain' => 'wonga.com' }
-    publisher.stub(:publish) do |hash|
-      expect(message.all? { |key, value| hash[key] == value }).to be_true
+    allow(publisher).to receive(:publish) do |hash|
+      expect(message.all? { |key, value| hash[key] == value }).to be_truthy
       expect(message['chef_environment']).to eq('test')
     end
 
