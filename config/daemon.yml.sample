@@ -25,6 +25,7 @@ development:
     api_key: some_pantry_api_key
     request_timeout: 10
     url: http://some.pantry.fqdn
+    domain: TEST
   sqs:
     queue_name: daemon_specific_queue
   sns:
@@ -59,6 +60,7 @@ test:
     monitor: true
   pantry:
     api_key: some_pantry_api_key
+    domain: TEST
     request_timeout: 10
     url: http://some.pantry.fqdn
   sqs:
@@ -94,6 +96,7 @@ production:
     monitor: true
   pantry:
     api_key: some_pantry_api_key
+    domain: TEST
     request_timeout: 10
     url: http://some.pantry.fqdn
   sqs:

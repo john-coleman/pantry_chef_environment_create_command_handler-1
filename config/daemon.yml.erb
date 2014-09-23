@@ -36,6 +36,7 @@
     monitor: <%= @config["daemon"]["monitor"] %>
   pantry:
     api_key: <%= @config["pantry"]["pantry_api_key"] %>
+    domain: <%= @config['pantry']['domain'] %>
     request_timeout: <%= @config["pantry"]["pantry_request_timeout"] %>
     url: <%= @config["pantry"]["pantry_url"] || @pantry_url %>
   sns:

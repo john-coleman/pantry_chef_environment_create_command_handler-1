@@ -18,6 +18,7 @@ module Wonga
         @team_name = normalize_name(@message['team_name'])
         @env_name = normalize_name(@message['environment_name'])
         @env_type = normalize_name(@message['environment_type'])
+        @users = Array(@message['users']).map { |user_name| "#{@config['pantry']['domain']}\\\\\\\\#{user_name}" }
 
         e = Chef::Environment.new
         name = chef_environment_name(@message)
@@ -26,7 +27,6 @@ module Wonga
         @logger.info("Building environment #{e.name}")
 
         # rubocop:disable Lint/Eval
-        # TODO: Change it to JSON parse
         e.default_attributes = eval(ERB.new(File.read(File.join(@template_path, "#{@env_type}_environment.erb"))).result(binding))
         # rubocop:enable Lint/Eval
         e.create

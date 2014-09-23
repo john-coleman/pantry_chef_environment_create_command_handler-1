@@ -2,7 +2,7 @@
   "authorization" => {
     "sudo" => {
       "groups" => [ "sysadmin", "EXAMPLE\\\\pantry" ],
-      "users" => [ "deploy", "ubuntu" ],
+      "users" => [ <%= @users.inject(""){|res, item| "#{res}\"#{item}\", " } %>"deploy", "ubuntu" ],
       "passwordless" => true,
       "include_sudoers_d" => true
     }

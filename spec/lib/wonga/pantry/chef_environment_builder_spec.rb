@@ -79,6 +79,40 @@ RSpec.describe Wonga::Pantry::ChefEnvironmentBuilder do
           expect(sonar['jdbc_username']).to eq sonar_jdbc_username
           expect(sonar['jdbc_password']).to eq 'ATestSonarPass'
         end
+
+        it 'sets users' do
+          expect(environment.default_attributes['authorization']['sudo']['users']).to be_include 'ubuntu'
+          expect(environment.default_attributes['authorization']['sudo']['users']).to be_include 'deploy'
+        end
+
+        context 'when team users are passed' do
+          let(:message) do
+            {
+              'team_name' => team_name,
+              'domain' => domain,
+              'environment_description' => 'A CI Environment',
+              'environment_name' => 'Jenkins',
+              'environment_type' => 'CI',
+              'wonga_sonar' => {
+                'server_hostname' => 'sonar-testhostname.test-domain',
+                'jdbc_username' => 'ThisTestSonarUser'
+              },
+              'users' => [user]
+            }
+          end
+          let(:user) { 'evil.user' }
+          let(:config_domain) { 'DOMAIN' }
+
+          let(:config) do
+            old_config = super()
+            old_config['pantry'] = { 'domain' => config_domain }
+            old_config
+          end
+
+          it 'grants them sudo' do
+            expect(environment.default_attributes['authorization']['sudo']['users']).to be_include("#{config_domain}\\\\#{user}")
+          end
+        end
       end
     end
 
@@ -140,6 +174,33 @@ RSpec.describe Wonga::Pantry::ChefEnvironmentBuilder do
         it 'with frontend_server vhost_name' do
           fe_site = environment.default_attributes['frontend_server']['sites'].first
           expect(fe_site['vhost_name']).to eq "#{prod_ns}.#{reg_ns}.#{env_ns}.some-name-tla.#{domain}"
+        end
+
+        context 'when team users are provided' do
+          let(:message) do
+            {
+              'team_name' => team_name,
+              'domain' => domain,
+              'environment_description' => 'A STG Environment',
+              'environment_name' => 'TED',
+              'environment_type' => 'STG',
+              'product' => 'YY',
+              'region' => 'ZZ',
+              'users' => [user]
+            }
+          end
+          let(:user) { 'evil.user' }
+          let(:config_domain) { 'DOMAIN' }
+
+          let(:config) do
+            old_config = super()
+            old_config['pantry'] = { 'domain' => config_domain }
+            old_config
+          end
+
+          it 'grants them sudo' do
+            expect(environment.default_attributes['authorization']['sudo']['users']).to be_include("#{config_domain}\\\\#{user}")
+          end
         end
       end
     end
