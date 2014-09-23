@@ -1,0 +1,15 @@
+AllCops:
+  Exclude:
+    - 'Guardfile'
+
+ClassAndModuleChildren:
+  Enabled: false
+Documentation:
+  Enabled: false
+
+CollectionMethods:
+  Enabled: false
+LineLength:
+  Max: 160
+Metrics/MethodLength:
+  Max: 25

@@ -9,8 +9,8 @@ module Wonga
 
       def handle_message(message)
         @logger.info("Received message: #{message}")
-        message["chef_environment"] = @builder.build!(message)
-        @logger.info("Message for #{message["team_name"]} processed. publishing")
+        message['chef_environment'] = @builder.build!(message)
+        @logger.info("Message for #{message['team_name']} processed. publishing")
         @publisher.publish(message)
       end
     end

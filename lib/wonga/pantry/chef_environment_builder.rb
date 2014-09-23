@@ -25,7 +25,10 @@ module Wonga
         e.description(@message['environment_description'])
         @logger.info("Building environment #{e.name}")
 
+        # rubocop:disable Lint/Eval
+        # TODO: Change it to JSON parse
         e.default_attributes = eval(ERB.new(File.read(File.join(@template_path, "#{@env_type}_environment.erb"))).result(binding))
+        # rubocop:enable Lint/Eval
         e.create
         name
       end
@@ -34,19 +37,20 @@ module Wonga
         name.parameterize.gsub('_', '-').gsub('--', '-')
       end
 
-      def first_env(envs, name, i=1)
+      def first_env(envs, name, i = 1)
         if !envs.include? "#{name}-#{i}"
           "#{name}-#{i}"
         else
-          first_env(envs, name, i+1)
+          first_env(envs, name, i + 1)
         end
       end
 
       private
+
       def chef_environment_name(message)
         environments = Chef::Environment.list.keys
 
-        if message['environment_type'] == "CI"
+        if message['environment_type'] == 'CI'
           chef_environment_name = "#{@team_name}-#{@env_type}"
         else
           chef_environment_name = "#{@team_name}-#{@env_type}-#{@env_name}"
@@ -58,7 +62,6 @@ module Wonga
           first_env(environments, chef_environment_name)
         end
       end
-
     end
   end
 end

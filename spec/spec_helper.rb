@@ -1,4 +1,4 @@
-unless ENV["SKIP_COV"]
+unless ENV['SKIP_COV']
   require 'simplecov'
   require 'simplecov-rcov'
   SimpleCov.formatter = SimpleCov::Formatter::MultiFormatter[
@@ -30,9 +30,19 @@ Chef::Knife.new.configure_chef
 Chef::Config[:chef_server_url] = 'http://127.0.0.1:8889'
 
 RSpec.configure do |config|
-  config.order = "random"
+  config.order = 'random'
 
   config.before(:each) do
     ChefZero::SingleServer.instance.clean
+  end
+
+  config.disable_monkey_patching!
+
+  config.expect_with :rspec do |expectations|
+    expectations.include_chain_clauses_in_custom_matcher_descriptions = true
+  end
+
+  config.mock_with :rspec do |mocks|
+    mocks.verify_partial_doubles = true
   end
 end
