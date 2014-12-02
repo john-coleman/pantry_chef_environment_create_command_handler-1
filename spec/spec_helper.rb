@@ -28,6 +28,8 @@ end
 
 Chef::Knife.new.configure_chef
 Chef::Config[:chef_server_url] = 'http://127.0.0.1:8889'
+Chef::Config[:client_key] = File.join(File.expand_path(File.dirname(File.realpath(__FILE__))), 'chef.pem')
+Chef::Config[:node_name] = 'test_name'
 
 RSpec.configure do |config|
   config.order = 'random'

@@ -178,6 +178,13 @@
           "username" => "<%= @config['chef']['wonga']['build_username'] %>"
         },
         {
+          "domain" => "WONGA",
+          "server_roles" => {
+            "sysadmin" => "ADD"
+          },
+          "username" => "DB Admins"
+        },
+        {
           "domain" => "TEST",
           "server_roles" => {
             "sysadmin" => "ADD"
