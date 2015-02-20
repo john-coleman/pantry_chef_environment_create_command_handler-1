@@ -1,7 +1,7 @@
 require 'chef'
 require 'chef/knife'
 require 'erb'
-require 'active_support/core_ext'
+require 'active_support/core_ext/string/inflections'
 
 module Wonga
   module Pantry

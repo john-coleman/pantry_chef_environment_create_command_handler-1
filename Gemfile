@@ -3,6 +3,7 @@ source 'https://rubygems.org'
 gem 'pantry_daemon_common', git: 'git@github.com:wongatech/pantry_daemon_common.git'
 gem 'chef', '~> 11.12'
 gem 'activesupport', '~> 4.0'
+gem 'aws-sdk', '~> 1.60'
 
 group :development do
   gem 'guard-bundler'

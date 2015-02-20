@@ -2,14 +2,20 @@ AllCops:
   Exclude:
     - 'Guardfile'
 
-ClassAndModuleChildren:
-  Enabled: false
-Documentation:
-  Enabled: false
-
-CollectionMethods:
-  Enabled: false
-LineLength:
+Metrics/LineLength:
   Max: 160
 Metrics/MethodLength:
-  Max: 25
+  Max: 35
+Metrics/ClassLength:
+  Enabled: false
+Metrics/CyclomaticComplexity:
+  Enabled: false
+Metrics/PerceivedComplexity:
+  Max: 13
+Metrics/AbcSize:
+  Enabled: false
+
+Style/Documentation:
+  Enabled: false
+Style/ClassAndModuleChildren:
+  Enabled: false
