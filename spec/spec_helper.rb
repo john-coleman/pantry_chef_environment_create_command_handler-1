@@ -7,7 +7,6 @@ unless ENV['SKIP_COV']
   ]
 end
 
-require 'aws'
 require 'chef'
 require 'chef/knife'
 require 'spec_support/shared_daemons'
