@@ -18,7 +18,7 @@ module Wonga
         @team_name = normalize_name(@message['team_name'])
         @env_name = normalize_name(@message['environment_name'])
         @env_type = normalize_name(@message['environment_type'])
-        @users = Array(@message['users']).map { |user_name| "#{@config['pantry']['domain']}\\\\\\\\#{user_name}" }
+        @users = Array(@message['users']).map { |user_name| "#{@config['pantry']['domain']}\\\\\\\\#{user_name.downcase}" }
 
         e = Chef::Environment.new
         name = chef_environment_name(@message)
