@@ -2,19 +2,47 @@ development:
   aws:
     access_key_id: some_aws_iam_access_key_id
     secret_access_key: some_aws_iam_secret_access_key
-    region: eu-west-1
+    region: us-east-1
+    request_wait: 10
   chef:
-    wonga:
-      chef_aws_access_key_id: AWSChefKeyUntilRoles
-      chef_aws_secret_access_key: AWSChefSecretUntilRoles
-      build_domain: ADevDomain
-      build_username: ADevProvisionerUsername
-      build_password: ADevBuildPassword
-      product: ADevProduct
-      region: ADevRegion
-    wonga_sonar:
+    authorization:
+      sudo:
+        groups:
+        - sudo
+        - ADevDomain\\\\ADevGroup
+    chef_aws_access_key_id: AWSChefKeyUntilRoles
+    chef_aws_secret_access_key: AWSChefSecretUntilRoles
+    build_domain: ADevDomain
+    build_username: ADevUser
+    build_password: ADevPassword
+    jenkins:
+      git_ssh_hosts:
+      - host: git.example.com
+        StrictHostKeyChecking: no
+        User: gituser
+    postfix:
+      main:
+        mynetworks: 10.1.2.0/24, 172.16.0.0/16
+        relayhost: relay.example.com
+    product: ADevProduct
+    region: ADevRegion
+    service_username: ADevServiceRoleAccount
+    snmp:
+      syscontact: halp@example.com
+      syslocationPhysical: myDesk
+      syslocationVirtual: Tinternets
+    sonar:
       jdbc_username: ADevSonarUser
       jdbc_password: ADevSonarPass
+    splunk:
+      forwarder_build: 12345
+      forwarder_version: 0.0.7
+      forwarder_installer_base_url: https://mirror.example.com/splunk/
+      splunk_deployment_server: splunk.example.com:8089
+      splunk_receiving_indexer: splunk.example.com:9997
+    windows:
+      hotfixes:
+      - https://mirror.example.com/hotfixes/Windows6.1-KB2749615-x64.msu
   daemon:
     app_name: this_daemon_name
     backtrace: true
@@ -37,17 +65,44 @@ test:
     secret_access_key: some_aws_iam_secret_access_key
     region: eu-west-1
   chef:
-    wonga:
-      chef_aws_access_key_id: AWSChefKeyUntilIAMRoles
-      chef_aws_secret_access_key: AWSChefSecretUntilIAMRoles
-      build_domain: ATestDomain
-      build_username: ATestProvisionerUsername
-      build_password: ATestBuildPassword
-      product: ATestProduct
-      region: ATestRegion
-    wonga_sonar:
+    authorization:
+      sudo:
+        groups:
+        - sudo
+        - ADevDomain\\\\ADevGroup
+    chef_aws_access_key_id: AWSChefKeyUntilRoles
+    chef_aws_secret_access_key: AWSChefSecretUntilRoles
+    build_domain: ADevDomain
+    build_username: ADevUser
+    build_password: ADevPassword
+    jenkins:
+      git_ssh_hosts:
+      - host: git.example.com
+        StrictHostKeyChecking: no
+        User: gituser
+    postfix:
+      main:
+        mynetworks: 10.1.2.0/24, 172.16.0.0/16
+        relayhost: relay.example.com
+    product: ADevProduct
+    region: ADevRegion
+    service_username: ADevServiceRoleAccount
+    snmp:
+      syscontact: halp@example.com
+      syslocationPhysical: myDesk
+      syslocationVirtual: Tinternets
+    sonar:
       jdbc_username: ATestSonarUser
       jdbc_password: ATestSonarPass
+    splunk:
+      forwarder_build: 12345
+      forwarder_version: 0.0.7
+      forwarder_installer_base_url: https://mirror.example.com/splunk/
+      splunk_deployment_server: splunk.example.com:8089
+      splunk_receiving_indexer: splunk.example.com:9997
+    windows:
+      hotfixes:
+      - https://mirror.example.com/hotfixes/Windows6.1-KB2749615-x64.msu
   daemon:
     app_name: this_daemon_name
     backtrace: true
@@ -74,17 +129,44 @@ production:
     secret_access_key: some_aws_iam_secret_access_key
     region: eu-west-1
   chef:
-    wonga:
-      chef_aws_access_key_id: AWSChefKeyUntilRoles
-      chef_aws_secret_access_key: AWSChefSecretUntilRoles
-      build_domain: AProdDomain
-      build_username: AProdProvisionerUsername
-      build_password: AProdBuildPassword
-      product: AProdProduct
-      region: AProdRegion
-    wonga_sonar:
-      jdbc_username: AProdSonarUser
-      jdbc_password: AProdSonarPass
+    authorization:
+      sudo:
+        groups:
+        - sudo
+        - ADevDomain\\\\ADevGroup
+    chef_aws_access_key_id: AWSChefKeyUntilRoles
+    chef_aws_secret_access_key: AWSChefSecretUntilRoles
+    build_domain: ADevDomain
+    build_username: ADevUser
+    build_password: ADevPassword
+    jenkins:
+      git_ssh_hosts:
+      - host: git.example.com
+        StrictHostKeyChecking: no
+        User: gituser
+    postfix:
+      main:
+        mynetworks: 10.1.2.0/24, 172.16.0.0/16
+        relayhost: relay.example.com
+    product: ADevProduct
+    region: ADevRegion
+    service_username: ADevServiceRoleAccount
+    snmp:
+      syscontact: halp@example.com
+      syslocationPhysical: myDesk
+      syslocationVirtual: Tinternets
+    sonar:
+      jdbc_username: ADevSonarUser
+      jdbc_password: ADevSonarPass
+    splunk:
+      forwarder_build: 12345
+      forwarder_version: 0.0.7
+      forwarder_installer_base_url: https://mirror.example.com/splunk/
+      splunk_deployment_server: splunk.example.com:8089
+      splunk_receiving_indexer: splunk.example.com:9997
+    windows:
+      hotfixes:
+      - https://mirror.example.com/hotfixes/Windows6.1-KB2749615-x64.msu
   daemon:
     app_name: this_daemon_name
     backtrace: false

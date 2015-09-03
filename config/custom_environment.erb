@@ -1,7 +1,7 @@
 {
   "authorization" => {
     "sudo" => {
-      "groups" => [ "sysadmin", "EXAMPLE\\\\pantry" ],
+      "groups" => [ <%= @config["chef"]["authorization"]["sudo"]["groups"].inject(""){|res, group| "#{res}\"#{group}\", " } %>"sysadmin" ],
       "users" => [ <%= @users.inject(""){|res, item| "#{res}\"#{item}\", " } %>"deploy", "ubuntu" ],
       "passwordless" => true,
       "include_sudoers_d" => true

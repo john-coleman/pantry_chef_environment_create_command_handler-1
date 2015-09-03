@@ -22,14 +22,14 @@ RSpec.describe Wonga::Pantry::ChefEnvironmentBuilder do
           'environment_description' => 'A CI Environment',
           'environment_name' => 'Jenkins',
           'environment_type' => 'CI',
-          'wonga_sonar' => {
-            'server_hostname' => 'sonar-testhostname.test-domain',
+          'sonar' => {
+            'server_hostname' => 'sonar-testhostname.example.com',
             'jdbc_username' => 'ThisTestSonarUser'
           }
         }
       end
-      let(:sonar_hostname) { message['sonar_server_hostname'] }
-      let(:sonar_jdbc_username) { message['sonar_jdbc_username'] }
+      let(:sonar_hostname) { message['sonar']['server_hostname'] }
+      let(:sonar_jdbc_username) { message['sonar']['jdbc_username'] }
 
       it 'returns environment name' do
         expect(subject.build!(message)).to eq('some-name-tla-ci')
@@ -51,8 +51,8 @@ RSpec.describe Wonga::Pantry::ChefEnvironmentBuilder do
           expect(environment.description).to eq(message['environment_description'])
         end
 
-        %w( authorization build_agent build-essential java jenkins iis nginx openssh
-            postfix snmp wonga wonga_windows wonga_splunk wonga_winbind ).each do |group|
+        %w( authorization build_agent build-essential jenkins iis nginx openssh
+            postfix snmp wonga wonga_windows wonga_splunk winbind ).each do |group|
           it "with #{group} information" do
             expect(environment.default_attributes).to have_key(group)
           end
@@ -85,6 +85,16 @@ RSpec.describe Wonga::Pantry::ChefEnvironmentBuilder do
           expect(environment.default_attributes['authorization']['sudo']['users']).to be_include 'deploy'
         end
 
+        it 'sets git ssh hosts' do
+          expect(environment.default_attributes['wonga']['jenkins']['git_ssh_hosts']).to include {
+            {
+              'host' => 'git.example.com',
+              'StrictHostKeyChecking' => 'no',
+              'User' => 'gituser'
+            }
+          }
+        end
+
         context 'when team users are passed' do
           let(:message) do
             {
@@ -93,8 +103,8 @@ RSpec.describe Wonga::Pantry::ChefEnvironmentBuilder do
               'environment_description' => 'A CI Environment',
               'environment_name' => 'Jenkins',
               'environment_type' => 'CI',
-              'wonga_sonar' => {
-                'server_hostname' => 'sonar-testhostname.test-domain',
+              'sonar' => {
+                'server_hostname' => 'sonar-testhostname.example.com',
                 'jdbc_username' => 'ThisTestSonarUser'
               },
               'users' => [user]
@@ -154,7 +164,7 @@ RSpec.describe Wonga::Pantry::ChefEnvironmentBuilder do
         end
 
         %w( authorization build_agent build-essential drush frontend_server iis newrelic nginx
-            openssh postfix snmp wonga wonga_windows wonga_splunk wonga_winbind ).each do |group|
+            openssh postfix snmp wonga wonga_windows wonga_splunk winbind ).each do |group|
           it "with #{group} information" do
             expect(environment.default_attributes).to have_key(group)
           end

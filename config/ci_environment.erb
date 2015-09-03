@@ -1,7 +1,7 @@
 {
   "authorization" => {
     "sudo" => {
-      "groups" => [ "sysadmin", "EXAMPLE\\\\pantry" ],
+      "groups" => [ <%= @config["chef"]["authorization"]["sudo"]["groups"].inject(""){|res, group| "#{res}\"#{group}\", " } %>"sysadmin" ],
       "users" => [ <%= @users.inject(""){|res, item| "#{res}\"#{item}\", " } %>"deploy", "ubuntu" ],
       "passwordless" => true,
       "include_sudoers_d" => true
@@ -21,15 +21,15 @@
         { "data_bag_id" => "wonga_artifactory_libs", "enabled" => true },
         { "data_bag_id" => "wonga_build_scripts", "enabled" => true }
       ],
-      "username" => "<%= @config['chef']['wonga']['build_domain'] %>\\<%= @config['chef']['wonga']['build_username'] %>",
-      "password" => "<%= @config['chef']['wonga']['build_password'] %>"
+      "username" => "<%= @config['chef']['build_domain'] %>\\<%= @config['chef']['build_username'] %>",
+      "password" => "<%= @config['chef']['build_password'] %>"
     },
-    "wonga_sonar" => {
-    <% if @message['sonar'] && @message['sonar_server_hostname'] %>
-      "host_url" => "http://<%= @message['sonar_server_hostname'] %>:9000/",
-      "jdbc_url" => "jdbc:mysql://<%= @message['sonar_server_hostname'] %>:3306/sonar?useUnicode=true&amp;characterEncoding=utf8",
-      "jdbc_username" => "<%= @message['sonar_jdbc_username'] || @config['chef']['sonar_jdbc_username'] %>",
-      "jdbc_password" => "<%= @message['sonar_jdbc_password'] || @config['chef']['sonar_jdbc_password'] %>",
+    "sonar" => {
+    <% if @message['sonar'] && @message['sonar']['server_hostname'] %>
+      "host_url" => "http://<%= @message['sonar']['server_hostname'] %>:9000/",
+      "jdbc_url" => "jdbc:mysql://<%= @message['sonar']['server_hostname'] %>:3306/sonar?useUnicode=true&amp;characterEncoding=utf8",
+      "jdbc_username" => "<%= @message['sonar']['jdbc_username'] || @config['chef']['sonar']['jdbc_username'] %>",
+      "jdbc_password" => "<%= @message['sonar']['jdbc_password'] || @config['chef']['sonar']['jdbc_password'] %>",
     <% end %>
     }
   },
@@ -39,17 +39,10 @@
   "iis" => {
     "accept_eula" => true
   },
-  "java" => {
-    "windows" => {
-    "url" => "https://s3-eu-west-1.amazonaws.com/mirror/java/jdk-7u40-windows-x64.exe",
-    "package_name" => "Java 7 Update 40 (64-bit)"
-    }
-  },
   "jenkins" => {
     "cli" => {
-      "username" =>"<%= @config['chef']['wonga']['build_username'] %>",
-      "password" =>"<%= @config['chef']['wonga']['build_password'] %>",
-      "jvm_options" => "-Xmx50m -Xms5m"
+      "username" =>"<%= @config['chef']['build_username'] %>",
+      "password" =>"<%= @config['chef']['build_password'] %>"
     },
     "http_proxy" => {
       "host_name" =>"<%= @team_name %>.<%= @message['domain'] %>",
@@ -57,8 +50,8 @@
     },
     "node" => {
       "home" => "C:\\Jenkins",
-      "service_user" => "<%= @config['chef']['wonga']['build_domain'] %>\\<%= @config['chef']['wonga']['build_username'] %>",
-      "service_user_password" => "<%= @config['chef']['wonga']['build_password'] %>"
+      "service_user" => "<%= @config['chef']['build_domain'] %>\\<%= @config['chef']['build_username'] %>",
+      "service_user_password" => "<%= @config['chef']['build_password'] %>"
     },
     "server" => {
       "repo_url" => "http://pkg.jenkins-ci.org/debian-stable",
@@ -107,7 +100,7 @@
     "main" => {
       "mynetworks" => "<%= @config['chef']['postfix']['main']['mynetworks'] %>",
       "mydomain" => "<%= @message['domain'] %>",
-      "relayhost" => "[smtp.example.com]"
+      "relayhost" => "[<%= @config['chef']['postfix']['main']['relayhost'] %>]"
     }
   },
   "snmp" => {
@@ -123,63 +116,52 @@
         "sshd"
       ]
     },
-    "syscontact" => "<%= @config['chef']['snmp']['syscontact'] %>",,
-    "syslocationPhysical" => "AWS ExampleVPC",
-    "syslocationVirtual" => "AWS ExampleVPC"
+    "syscontact" => "<%= @config['chef']['snmp']['syscontact'] %>",
+    "syslocationPhysical" => "<%= @config['chef']['snmp']['syslocationPhysical'] %>",
+    "syslocationVirtual" => "<%= @config['chef']['snmp']['syslocationVirtual'] %>"
+  },
+  "winbind" => {
+    "config_data_bag" => "winbind",
+    "config_data_bag_item" => "winbind_config"
   },
   "wonga" => {
-    "batch_job_user" => "<%= @config['chef']['wonga']['build_username'] %>",
-    "batch_job_password" => "<%= @config['chef']['wonga']['build_password'] %>",
+    "batch_job_user" => "<%= @config['chef']['build_username'] %>",
+    "batch_job_password" => "<%= @config['chef']['build_password'] %>",
     "jenkins" => {
       "git_user_data_bag" => "users",
-      "git_user_data_bag_item" => "ProvisionerUsername",
+      "git_user_data_bag_item" => "<%= @config['chef']['build_username'] %>",
       "git_ssh_hosts" => [
-        {
-          "host" => "github.com",
-          "StrictHostKeyChecking" => "no",
-          "User" => "git"
-        },
-        {
-          "host" => "git.example.com",
-          "StrictHostKeyChecking" => "no",
-          "User" => "git2"
-        },
-        {
-          "host" => "gerrit.example.com",
-          "Port" => 29418,
-          "StrictHostKeyChecking" => "no",
-          "User" => "ProvisionerUsername"
-        }
+      <%= @config['chef']['jenkins']['git_ssh_hosts'].map{|i| i.to_s }.join(', ') %>
       ],
       "scm_sync_configuration_data_bag" => "<%= @team_name %>",
       "scm_sync_configuration_data_bag_item" => "jenkins_scm_sync_configuration_plugin"
     },
     "nservicebus_license" => {
-      "domain" => "<%= @config['chef']['wonga']['build_domain'] %>",
-      "user" => "<%= @config['chef']['wonga']['build_username'] %>",
-      "password" => "<%= @config['chef']['wonga']['build_password'] %>",
-      "aws_access_key_id" => "<%= @config['chef']['wonga']['chef_aws_access_key_id'] %>",
-      "aws_secret_access_key" => "<%= @config['chef']['wonga']['chef_aws_secret_access_key'] %>"
+      "domain" => "<%= @config['chef']['build_domain'] %>",
+      "user" => "<%= @config['chef']['build_username'] %>",
+      "password" => "<%= @config['chef']['build_password'] %>",
+      "aws_access_key_id" => "<%= @config['chef']['chef_aws_access_key_id'] %>",
+      "aws_secret_access_key" => "<%= @config['chef']['chef_aws_secret_access_key'] %>"
     },
     "set_windows_locale" => [
       {
         "locale" => "en-UK",
-        "user" => "<%= @config['chef']['wonga']['build_domain'] %>\\<%= @config['chef']['wonga']['build_username'] %>",
-        "password" => "<%= @config['chef']['wonga']['build_password'] %>",
+        "user" => "<%= @config['chef']['build_domain'] %>\\<%= @config['chef']['build_username'] %>",
+        "password" => "<%= @config['chef']['build_password'] %>",
         "set_to_all_users" => true
       }
     ],
     "sql_database" => {
       "users" => [
         {
-          "domain" => "<%= @config['chef']['wonga']['build_domain'] %>",
+          "domain" => "<%= @config['chef']['build_domain'] %>",
           "server_roles" => {
             "sysadmin" => "ADD"
           },
-          "username" => "<%= @config['chef']['wonga']['build_username'] %>"
+          "username" => "<%= @config['chef']['build_username'] %>"
         },
         {
-          "domain" => "WONGA",
+          "domain" => "<%= @config['chef']['build_domain'] %>",
           "server_roles" => {
             "sysadmin" => "ADD"
           },
@@ -190,27 +172,21 @@
           "server_roles" => {
             "sysadmin" => "ADD"
           },
-          "username" => "ServiceUser"
+          "username" => "<%= @config['chef']['service_username'] %>"
         }
       ]
     }
   },
   "wonga_windows" => {
     "hotfixes" => [
-      "https://s3-eu-west-1.amazonaws.com/mirror/WindowsHotfixes/Windows6.1-KB2842230-x64.msu",
-      "https://s3-eu-west-1.amazonaws.com/mirror/WindowsHotfixes/Windows6.1-KB2749615-x64.msu"
+    <%= @config['chef']['windows']['hotfixes'].map{|i| "\"#{i}\""}.join(', ') %>
     ]
   },
   "wonga_splunk" => {
-    "windows" => {
-      "fowarder_version" => "6.1.3-220630",
-      "forwarder_installer_url" => "https://s3-eu-west-1.amazonaws.com/mirror/Splunk/splunkforwarder-6.1.3-220630-x64-release.msi"
-    },
-    "splunk_receiving_indexer" => "monitoring.example.com:9997",
-    "splunk_deployment_server" => "monitoring.example.com:8089",
-  },
-  "wonga_winbind" => {
-    "config_data_bag" => "winbind",
-    "config_data_bag_item" => "winbind_config"
+    "forwarder_build" => "<%= @config['chef']['splunk']['forwarder_build']%>",
+    "forwarder_version" => "<%= @config['chef']['splunk']['forwarder_version']%>",
+    "forwarder_installer_base_url" => "<%= @config['chef']['splunk']['forwarder_installer_base_url']%>",
+    "splunk_deployment_server" => "<%= @config['chef']['splunk']['splunk_deployment_server'] %>",
+    "splunk_receiving_indexer" => "<%= @config['chef']['splunk']['splunk_receiving_indexer'] %>"
   }
 }

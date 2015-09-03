@@ -1,46 +1,83 @@
 <%= @app_environment %>:
-<% @daemon_dir = @config["daemon"]["dir"] || @dir %>
+<% @daemon_dir = @config['daemon']['dir'] || @dir %>
   aws:
-    access_key_id: <%= @config["aws"]["config"]["access_key_id"] %>
-    secret_access_key: <%= @config["aws"]["config"]["secret_access_key"] %>
-    region: <%= @config["aws"]["config"]["region"] %>
-    request_wait: <%= @config["aws"]["config"]["request_wait"] %>
+    access_key_id: <%= @config['aws']['config']['access_key_id'] %>
+    secret_access_key: <%= @config['aws']['config']['secret_access_key'] %>
+    region: <%= @config['aws']['config']['region'] %>
+    request_wait: <%= @config['aws']['config']['request_wait'] %>
   chef:
-    wonga:
-      chef_aws_access_key_id: <%= @config["chef"]["wonga"]["chef_aws_access_key_id"] %>
-      chef_aws_secret_access_key: <%= @config["chef"]["wonga"]["chef_aws_secret_access_key"] %>
-      build_domain: <%= @config["chef"]["wonga"]["build_domain"] %>
-      build_username: <%= @config["chef"]["wonga"]["build_username"] %>
-      build_password: <%= @config["chef"]["wonga"]["build_password"] %>
-      product: <%= @config["chef"]["wonga"]["product"] %>
-      region: <%= @config["chef"]["wonga"]["region"] %>
-    wonga_sonar:
-      jdbc_username: <%= @config["chef"]['sonar_jdbc_username'] %>
-      jdbc_password: <%= @config["chef"]['sonar_jdbc_password'] %>
+    authorization:
+      sudo:
+        groups:
+        - sudo
+        <% @config['chef']['authorization']['sudo']['groups'].each do |sudo_group| %>
+        - <%= sudo_group %>
+        <% end %>
+    chef_aws_access_key_id: <%= @config['chef']['chef_aws_access_key_id'] %>
+    chef_aws_secret_access_key: <%= @config['chef']['chef_aws_secret_access_key'] %>
+    build_domain: <%= @config['chef']['build_domain'] %>
+    build_username: <%= @config['chef']['build_username'] %>
+    build_password: <%= @config['chef']['build_password'] %>
+    jenkins:
+      git_ssh_hosts:
+      - host: github.com
+        StrictHostKeyChecking: no
+        User: git
+        <% @config['chef']['jenkins']['git_ssh_hosts'].each do |git_host| %>
+      - <%= "host: #{git_host['host']}" %>
+        <% git_host.reject{|i,j| i = 'host'}.each_pair |k,v| %>
+        <%= "#{k}: #{v}" %>
+        <% end %>
+        <% end %>
+    postfix:
+      main:
+        mynetworks: <%= @config['chef']['postfix']['main']['mynetworks'] %>
+        relayhost: <%= @config['chef']['postfix']['main']['relayhost'] %>
+    product: <%= @config['chef']['product'] %>
+    region: <%= @config['chef']['region'] %>
+    service_username: <%= @config['chef']['service_username'] %>
+    snmp:
+      syscontact: <%= @config['chef']['snmp']['syscontact'] %>
+      syslocationPhysical: <%= @config['chef']['snmp']['syslocationPhysical'] %>
+      syslocationVirtual: <%= @config['chef']['snmp']['syslocationVirtual'] %>
+    sonar:
+      jdbc_username: <%= @config['chef']['sonar']['jdbc_username'] %>
+      jdbc_password: <%= @config['chef']['sonar']['jdbc_password'] %>
+    splunk:
+      forwarder_build: <%= @config['chef']['splunk']['forwarder_build']%>
+      forwarder_version: <%= @config['chef']['splunk']['forwarder_version']%>
+      forwarder_installer_base_url: <%= @config['chef']['splunk']['forwarder_installer_base_url']%>
+      splunk_deployment_server: <%= @config['splunk']['splunk_deployment_server'] %>
+      splunk_receiving_indexer: <%= @config['splunk']['splunk_receiving_indexer'] %>
+    windows:
+      hotfixes:
+      <% @config['chef']['windows']['hotfixes'].each do |hotfix| %>
+      - <%= hotfix %>
+      <% end %>
   daemon:
-    app_name: <%= @config["id"] %>
-    backtrace: <%= @config["daemon"]["backtrace"] %>
-    dir_mode: <%= @config["daemon"]["dir_mode"] %>
+    app_name: <%= @config['id'] %>
+    backtrace: <%= @config['daemon']['backtrace'] %>
+    dir_mode: <%= @config['daemon']['dir_mode'] %>
     dir: <%= @daemon_dir %>
-    <% if @config["daemon"]["log"] %>
+    <% if @config['daemon']['log'] %>
     log:
-      logger: <%= @config["daemon"]["log"]["logger"] %>
-      <% case @config["daemon"]["log"]["logger"]
-         when "file" %>
-      log_file: <%= File.join(@daemon_dir, @config["daemon"]["log"]["log_file"]) %>
-      shift_age: <%= @config["daemon"]["log"]["shift_age"] %>
-      <% when "syslog" %>
-      log_facility: <%= @config["daemon"]["log"]["log_facility"] %>
+      logger: <%= @config['daemon']['log']['logger'] %>
+      <% case @config['daemon']['log']['logger']
+         when 'file' %>
+      log_file: <%= File.join(@daemon_dir, @config['daemon']['log']['log_file']) %>
+      shift_age: <%= @config['daemon']['log']['shift_age'] %>
+      <% when 'syslog' %>
+      log_facility: <%= @config['daemon']['log']['log_facility'] %>
       <% end %>
     <% end %>
-    monitor: <%= @config["daemon"]["monitor"] %>
+    monitor: <%= @config['daemon']['monitor'] %>
   pantry:
-    api_key: <%= @config["pantry"]["pantry_api_key"] %>
+    api_key: <%= @config['pantry']['pantry_api_key'] %>
     domain: <%= @config['pantry']['domain'] %>
-    request_timeout: <%= @config["pantry"]["pantry_request_timeout"] %>
-    url: <%= @config["pantry"]["pantry_url"] || @pantry_url %>
+    request_timeout: <%= @config['pantry']['pantry_request_timeout'] %>
+    url: <%= @config['pantry']['pantry_url'] || @pantry_url %>
   sns:
-    topic_arn: <%= @config["aws"]["topic_arn"] %>
-    error_arn: <%= @config["aws"]["error_arn"] %>
+    topic_arn: <%= @config['aws']['topic_arn'] %>
+    error_arn: <%= @config['aws']['error_arn'] %>
   sqs:
-    queue_name: <%= @config["aws"]["queue_name"] %>
+    queue_name: <%= @config['aws']['queue_name'] %>
