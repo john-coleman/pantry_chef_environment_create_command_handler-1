@@ -19,3 +19,6 @@ Style/Documentation:
   Enabled: false
 Style/ClassAndModuleChildren:
   Enabled: false
+Performance/StringReplacement:
+  Exclude:
+    - 'lib/wonga/pantry/chef_environment_builder.rb'

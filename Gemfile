@@ -1,7 +1,7 @@
 source 'https://rubygems.org'
 
 gem 'pantry_daemon_common', git: 'git@github.com:wongatech/pantry_daemon_common.git'
-gem 'chef', '~> 11.12'
+gem 'chef', '~> 12.0'
 gem 'activesupport', '~> 4.0'
 
 group :development do

@@ -25,7 +25,7 @@
         User: git
         <% @config['chef']['jenkins']['git_ssh_hosts'].each do |git_host| %>
       - <%= "host: #{git_host['host']}" %>
-        <% git_host.reject{|i,j| i = 'host'}.each_pair |k,v| %>
+        <% git_host.reject{|i,j| i = 'host'}.each_pair do |k,v| %>
         <%= "#{k}: #{v}" %>
         <% end %>
         <% end %>
