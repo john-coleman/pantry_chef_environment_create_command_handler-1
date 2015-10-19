@@ -1,6 +1,6 @@
 source 'https://rubygems.org'
 
-gem 'pantry_daemon_common', git: 'git@github.com:wongatech/pantry_daemon_common.git'
+gem 'pantry_daemon_common', github: 'wongatech/pantry_daemon_common'
 gem 'chef', '~> 12.0'
 gem 'activesupport', '~> 4.0'
 

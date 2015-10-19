@@ -34,7 +34,7 @@ module Wonga
       end
 
       def normalize_name(name)
-        name.parameterize.gsub('_', '-').gsub('--', '-')
+        name.parameterize.tr('_', '-').gsub('--', '-')
       end
 
       def first_env(envs, name, i = 1)

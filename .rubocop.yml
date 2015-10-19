@@ -1,9 +1,27 @@
 AllCops:
   Exclude:
-    - 'Guardfile'
+    - '**/metadata.rb'
+    - '**/*.gemspec'
+    - '**/version.rb'
+    - '*file'
+
+Style/ClassAndModuleChildren:
+  Enabled: false
+Style/CollectionMethods:
+  Enabled: false
+Style/Documentation:
+  Enabled: false
+Style/FormatString:
+  Enabled: false
+Style/SingleLineBlockParams:
+  Enabled: false
+Style/NumericLiterals:
+  MinDigits: 9
+Style/MultilineOperationIndentation:
+  Enabled: false
 
 Metrics/LineLength:
-  Max: 160
+  Max: 202
 Metrics/MethodLength:
   Max: 35
 Metrics/ClassLength:
@@ -14,11 +32,9 @@ Metrics/PerceivedComplexity:
   Max: 13
 Metrics/AbcSize:
   Enabled: false
+Metrics/ParameterLists:
+  Max: 6
 
-Style/Documentation:
-  Enabled: false
-Style/ClassAndModuleChildren:
-  Enabled: false
 Performance/StringReplacement:
   Exclude:
     - 'lib/wonga/pantry/chef_environment_builder.rb'
