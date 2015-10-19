@@ -264,6 +264,3 @@ DEPENDENCIES
   rubocop
   simplecov
   simplecov-rcov
-
-BUNDLED WITH
-   1.10.6

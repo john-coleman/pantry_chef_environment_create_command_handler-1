@@ -47,8 +47,8 @@
       forwarder_build: <%= @config['chef']['splunk']['forwarder_build']%>
       forwarder_version: <%= @config['chef']['splunk']['forwarder_version']%>
       forwarder_installer_base_url: <%= @config['chef']['splunk']['forwarder_installer_base_url']%>
-      splunk_deployment_server: <%= @config['splunk']['splunk_deployment_server'] %>
-      splunk_receiving_indexer: <%= @config['splunk']['splunk_receiving_indexer'] %>
+      splunk_deployment_server: <%= @config['chef']['splunk']['splunk_deployment_server'] %>
+      splunk_receiving_indexer: <%= @config['chef']['splunk']['splunk_receiving_indexer'] %>
     windows:
       hotfixes:
       <% @config['chef']['windows']['hotfixes'].each do |hotfix| %>
